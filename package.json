@@ -17,5 +17,8 @@
     "typescript": "^5.5.3",
     "vite": "^8.1.5"
   },
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@tauri-apps/plugin-fs": "^2.5.1"
+  }
 }

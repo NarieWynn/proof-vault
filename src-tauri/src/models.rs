@@ -68,12 +68,12 @@ pub struct Goal {
     pub created_at: DateTime<Utc>,
     pub status: GoalStatus,
     pub deadline: Option <DateTime<Utc>>,
-    pub attempts: Vec <GoalAttempt>,
     pub archived_at: Option <DateTime<Utc>>
 }
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct GoalAttempt {
     pub id: String,
+    pub goal_id: String,
     pub date: DateTime<Utc>,
     pub result: String,
     pub is_target_met: bool,

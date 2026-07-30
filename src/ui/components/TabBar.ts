@@ -1,21 +1,20 @@
 export type TabName = 'goal' | 'study' | 'archive' | 'overview';
 
 const TABS: { key: TabName; label: string }[] = [
-    { key: 'overview', label: 'Tổng quan' },
-    { key: 'goal', label: 'Goal' },
-    { key: 'study', label: 'Study' },
-    { key: 'archive', label: 'Archive' },
+    { key: 'overview', label: 'overview' },
+    { key: 'goal', label: 'goals' },
+    { key: 'study', label: 'tasks' },
+    { key: 'archive', label: 'archive' },
 ];
 
 export function renderTabBar(activeTab: TabName): string {
     return `
-    <div class="flex gap-1 border-b border-gray-700 mb-4">
+    <div class="tab-bar">
       ${TABS.map(
         (tab) => `
-        <button
-          class="tab-btn px-4 py-2 text-sm ${tab.key === activeTab ? 'text-cyan-400 border-b-2 border-cyan-400' : 'text-gray-400'}"
-          data-tab="${tab.key}"
-        >${tab.label}</button>
+        <button class="tab-btn ${tab.key === activeTab ? 'active' : ''}" data-tab="${tab.key}">
+          ${tab.label}
+        </button>
       `
     ).join('')}
     </div>

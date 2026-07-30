@@ -5,23 +5,23 @@ export function renderGoalCard(goal: Goal): string {
     const lastAttempt = goal.attempts[goal.attempts.length - 1];
 
     return `
-    <div class="goal-card p-4 border border-gray-700 rounded-lg mb-3" data-id="${goal.id}">
-      <div class="flex items-center justify-between">
-        <span class="font-medium">${goal.title}</span>
-        <span class="text-xs ${isArchived ? 'text-green-400' : 'text-gray-400'}">
-          ${isArchived ? 'Đã hoàn thành' : `${goal.attempts.length} lần thử`}
+    <div class="card" data-id="${goal.id}">
+      <div class="card-header">
+        <span class="title">${goal.title}</span>
+        <span class="${isArchived ? 'status-done' : 'status-active'}">
+          ${isArchived ? 'done' : `${goal.attempts.length} attempt(s)`}
         </span>
       </div>
-      ${goal.deadline ? `<p class="text-xs text-gray-500 mt-1">Hạn: ${new Date(goal.deadline).toLocaleDateString('vi-VN')}</p>` : ''}
-      ${lastAttempt ? `<p class="text-xs text-gray-500 mt-1">Lần gần nhất: ${lastAttempt.result} (${new Date(lastAttempt.date).toLocaleDateString('vi-VN')})</p>` : ''}
+      ${goal.deadline ? `<p class="meta">deadline: ${new Date(goal.deadline).toLocaleDateString('en-US')}</p>` : ''}
+      ${lastAttempt ? `<p class="meta">last attempt: ${lastAttempt.result} (${new Date(lastAttempt.date).toLocaleDateString('en-US')})</p>` : ''}
 
       ${!isArchived ? `
-        <div class="mt-3 flex gap-2 items-center">
-          <input type="text" class="attempt-result-input text-xs bg-gray-800 border border-gray-600 rounded px-2 py-1" placeholder="Kết quả (VD: 6.5)" data-id="${goal.id}" />
-          <label class="text-xs flex items-center gap-1">
-            <input type="checkbox" class="attempt-target-checkbox" data-id="${goal.id}" /> Đạt mục tiêu
+        <div class="form-row" style="margin-top: 10px; margin-bottom: 0;">
+          <input type="text" class="attempt-result-input" placeholder="result (e.g. 6.5)" data-id="${goal.id}" style="flex: 0 1 140px;" />
+          <label class="meta" style="display:flex; align-items:center; gap:4px;">
+            <input type="checkbox" class="attempt-target-checkbox" data-id="${goal.id}" /> target met
           </label>
-          <button class="btn-add-attempt text-xs text-cyan-400" data-id="${goal.id}">Ghi nhận</button>
+          <button class="btn-text btn-add-attempt" data-id="${goal.id}">log</button>
         </div>
       ` : ''}
     </div>

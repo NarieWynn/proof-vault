@@ -42,12 +42,7 @@ export class GoalManager {
         Object.assign(goal, updates);
     }
 
-    addAttempt(
-        goalId: string,
-        result: string,
-        isTargetMet: boolean,
-        note?: string
-    ): GoalAttempt | undefined {
+    addAttempt( goalId: string, result: string, isTargetMet: boolean, note?: string): GoalAttempt | undefined {
         const goal = this.getGoalById(goalId);
         if (!goal) return undefined;
 

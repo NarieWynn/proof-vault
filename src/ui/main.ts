@@ -49,7 +49,7 @@ function renderApp() {
             renderStudyView(contentEl, taskManager, goalManager, onChange);
             break;
         case 'archive':
-            renderArchiveView(contentEl, goalManager, taskManager, onChange);
+            renderArchiveView(contentEl, goalManager, taskManager);
             break;
         case 'overview':
             renderOverviewView(contentEl, goalManager, taskManager);

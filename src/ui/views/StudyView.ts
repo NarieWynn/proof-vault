@@ -12,38 +12,34 @@ export function renderStudyView(
     const tasks = taskManager.getAllTasks().filter((t) => t.status !== 'archived');
 
     container.innerHTML = `
-    <div class="p-6">
-      <h2 class="text-xl mb-4">Study</h2>
+    <h2>study</h2>
 
-      ${
+    ${
         activeGoals.length === 0
-            ? '<p class="text-sm text-gray-500 mb-4">Chưa có goal nào — thêm goal ở tab Goal trước đã.</p>'
+            ? '<p class="empty-state">no goals yet — add one in the goal tab first.</p>'
             : `
-        <div class="flex gap-2 mb-6">
-          <input id="new-task-title" type="text" placeholder="VD: Làm 1 bài reading"
-            class="flex-1 bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm" />
-          <select id="new-task-goal" class="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm">
-            ${activeGoals.map((g) => `<option value="${g.id}">${g.title}</option>`).join('')}
-          </select>
-          <input id="new-task-category" type="text" placeholder="Category (VD: reading)"
-            class="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm w-32" />
-          <button id="btn-add-task" class="bg-cyan-500 text-black px-4 py-2 rounded text-sm">Thêm</button>
-        </div>
-      `
+      <div class="form-row">
+        <input id="new-task-title" type="text" placeholder="e.g. do 1 reading passage" />
+        <select id="new-task-goal" style="flex: 0 1 160px;">
+          ${activeGoals.map((g) => `<option value="${g.id}">${g.title}</option>`).join('')}
+        </select>
+        <input id="new-task-category" type="text" placeholder="category (e.g. reading)" style="flex: 0 1 140px;" />
+        <button id="btn-add-task" class="btn btn-primary">add</button>
+      </div>
+    `
     }
 
-      <div id="task-list">
-        ${tasks.length ? tasks.map(renderTaskItem).join('') : '<p class="text-sm text-gray-500">Chưa có task nào hôm nay.</p>'}
-      </div>
+    <div id="task-list">
+      ${tasks.length ? tasks.map(renderTaskItem).join('') : '<p class="empty-state">no tasks today.</p>'}
+    </div>
 
-      <div id="feedback-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center">
-        <div class="bg-gray-800 p-6 rounded-lg w-96">
-          <p class="text-sm mb-2">Ghi nhận lại (không bắt buộc):</p>
-          <textarea id="feedback-input" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-sm" rows="3" placeholder="VD: sai câu suy luận từ đồng nghĩa"></textarea>
-          <div class="flex justify-end gap-2 mt-3">
-            <button id="btn-cancel-archive" class="text-xs text-gray-400">Hủy</button>
-            <button id="btn-confirm-archive" class="text-xs bg-green-500 text-black px-3 py-1 rounded">Lưu & hoàn thành</button>
-          </div>
+    <div id="feedback-modal" class="modal-overlay hidden">
+      <div class="modal-box">
+        <p class="meta" style="margin-bottom: 8px;">reflection (optional):</p>
+        <textarea id="feedback-input" rows="3" placeholder="e.g. missed a synonym-inference question"></textarea>
+        <div class="modal-actions">
+          <button id="btn-cancel-archive" class="btn-text">cancel</button>
+          <button id="btn-confirm-archive" class="btn btn-primary">save & complete</button>
         </div>
       </div>
     </div>

@@ -9,20 +9,16 @@ export function renderGoalView(
     const activeGoals = goalManager.getActiveGoals();
 
     container.innerHTML = `
-    <div class="p-6">
-      <h2 class="text-xl mb-4">Goal</h2>
+    <h2>goal</h2>
 
-      <div class="flex gap-2 mb-6">
-        <input id="new-goal-title" type="text" placeholder="Tên mục tiêu (VD: IELTS 7.0)"
-          class="flex-1 bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm" />
-        <input id="new-goal-deadline" type="date"
-          class="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm" />
-        <button id="btn-add-goal" class="bg-cyan-500 text-black px-4 py-2 rounded text-sm">Thêm</button>
-      </div>
+    <div class="form-row">
+      <input id="new-goal-title" type="text" placeholder="e.g. IELTS 7.0" />
+      <input id="new-goal-deadline" type="date" style="flex: 0 1 160px;" />
+      <button id="btn-add-goal" class="btn btn-primary">add</button>
+    </div>
 
-      <div id="goal-list">
-        ${activeGoals.length ? activeGoals.map(renderGoalCard).join('') : '<p class="text-sm text-gray-500">Chưa có goal nào đang thực hiện.</p>'}
-      </div>
+    <div id="goal-list">
+      ${activeGoals.length ? activeGoals.map(renderGoalCard).join('') : '<p class="empty-state">no active goals yet.</p>'}
     </div>
   `;
 

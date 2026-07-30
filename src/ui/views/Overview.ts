@@ -1,12 +1,13 @@
 import { GoalManager } from '../../models/GoalManager';
 import { TaskManager } from '../../models/TaskManager';
 
-function getColorForCount(count: number, max: number): string {
-    if (count === 0) return 'bg-gray-800';
+function levelForCount(count: number, max: number): string {
+    if (count === 0) return '';
     const ratio = count / max;
-    if (ratio < 0.33) return 'bg-teal-900';
-    if (ratio < 0.66) return 'bg-teal-700';
-    return 'bg-teal-400';
+    if (ratio < 0.33) return 'level-1';
+    if (ratio < 0.66) return 'level-2';
+    if (ratio < 1) return 'level-3';
+    return 'level-4';
 }
 
 export function renderOverviewView(
@@ -28,39 +29,37 @@ export function renderOverviewView(
     }
 
     container.innerHTML = `
-    <div class="p-6">
-      <h2 class="text-xl mb-4">Tổng quan</h2>
+    <h2>overview</h2>
 
-      <p class="text-sm text-gray-400 mb-2">Hoạt động 90 ngày gần đây</p>
-      <div class="grid grid-cols-15 gap-1 mb-6" style="grid-template-columns: repeat(15, 1fr);">
-        ${days
+    <p class="faint" style="margin-bottom: 8px;">last 90 days</p>
+    <div class="heatmap-grid">
+      ${days
         .map((d) => {
             const info = activity[d.key];
             const count = info?.count ?? 0;
-            const title = `${d.date.toLocaleDateString('vi-VN')}: ${count} task, ${Math.round((info?.totalSeconds ?? 0) / 60)} phút`;
-            return `<div class="day-cell aspect-square rounded ${getColorForCount(count, maxCount)}" title="${title}" data-date="${d.key}"></div>`;
+            const title = `${d.date.toLocaleDateString('en-US')}: ${count} task(s), ${Math.round((info?.totalSeconds ?? 0) / 60)} min`;
+            return `<div class="day-cell ${levelForCount(count, maxCount)}" title="${title}" data-date="${d.key}"></div>`;
         })
         .join('')}
-      </div>
+    </div>
 
-      <p class="text-sm text-gray-400 mb-2">Mục tiêu</p>
-      <div id="goal-summary-list">
-        ${allGoals
+    <p class="faint" style="margin-bottom: 8px;">goals</p>
+    <div id="goal-summary-list">
+      ${allGoals
         .map(
             (g) => `
-          <div class="flex items-center justify-between p-3 border border-gray-700 rounded-lg mb-2">
-            <span class="text-sm">${g.title}</span>
-            <span class="text-xs ${g.status === 'archived' ? 'text-green-400' : 'text-gray-400'}">
-              ${g.status === 'archived' ? 'Đã hoàn thành' : 'Đang thực hiện'}
-            </span>
-          </div>
-        `
+        <div class="card card-header">
+          <span class="title">${g.title}</span>
+          <span class="${g.status === 'archived' ? 'status-done' : 'status-active'}">
+            ${g.status === 'archived' ? 'done' : 'active'}
+          </span>
+        </div>
+      `
         )
-        .join('') || '<p class="text-sm text-gray-500">Chưa có goal nào.</p>'}
-      </div>
-
-      <div id="day-detail" class="mt-4"></div>
+        .join('') || '<p class="empty-state">no goals yet.</p>'}
     </div>
+
+    <div id="day-detail" style="margin-top: 16px;"></div>
   `;
 
     const detailPanel = container.querySelector('#day-detail') as HTMLElement;
@@ -73,20 +72,20 @@ export function renderOverviewView(
             const tasksOfDay = taskManager.getTasksByDate(targetDate);
 
             if (tasksOfDay.length === 0) {
-                detailPanel.innerHTML = `<p class="text-sm text-gray-500">Không có hoạt động ngày ${targetDate.toLocaleDateString('vi-VN')}.</p>`;
+                detailPanel.innerHTML = `<p class="empty-state">no activity on ${targetDate.toLocaleDateString('en-US')}.</p>`;
                 return;
             }
 
             detailPanel.innerHTML = `
-        <div class="border border-gray-700 rounded-lg p-4">
-          <p class="text-sm font-medium mb-2">${targetDate.toLocaleDateString('vi-VN')}</p>
+        <div class="card">
+          <p class="title" style="margin-bottom: 8px;">${targetDate.toLocaleDateString('en-US')}</p>
           ${tasksOfDay
                 .map(
                     (t) => `
-            <div class="text-xs border-b border-gray-800 py-2">
+            <div class="task-item">
               <span>${t.title} — ${t.category}</span>
-              ${t.durationSeconds ? `<span class="text-gray-500"> · ${Math.round(t.durationSeconds / 60)} phút</span>` : ''}
-              ${t.feedback ? `<p class="text-gray-500 mt-1">${t.feedback}</p>` : ''}
+              ${t.durationSeconds ? `<span class="meta"> · ${Math.round(t.durationSeconds / 60)} min</span>` : ''}
+              ${t.feedback ? `<p class="feedback-note">${t.feedback}</p>` : ''}
             </div>
           `
                 )

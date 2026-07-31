@@ -1,4 +1,3 @@
-use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -9,7 +8,7 @@ pub enum TaskStatus {
 }
 
 impl TaskStatus {
-    pub fn from_str (s: &str) -> Self {
+    pub fn from_str(s: &str) -> Self {
         match s {
             "InProgress" => TaskStatus::InProgress,
             "Completed" => TaskStatus::Completed,
@@ -17,14 +16,15 @@ impl TaskStatus {
         }
     }
 
-    pub fn as_str (&self) -> &str {
+    pub fn as_str(&self) -> &str {
         match self {
-            TaskStatus:: Todo => "Todo",
+            TaskStatus::Todo => "Todo",
             TaskStatus::InProgress => "InProgress",
             TaskStatus::Completed => "Completed",
         }
     }
 }
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum GoalStatus {
     Active,
@@ -33,7 +33,7 @@ pub enum GoalStatus {
 }
 
 impl GoalStatus {
-    pub fn from_str (s: &str) -> Self {
+    pub fn from_str(s: &str) -> Self {
         match s {
             "Completed" => GoalStatus::Completed,
             "Archived" => GoalStatus::Archived,
@@ -41,41 +41,44 @@ impl GoalStatus {
         }
     }
 
-    pub fn as_str (&self) -> &str {
+    pub fn as_str(&self) -> &str {
         match self {
-            GoalStatus::Active => "Completed",
-            GoalStatus::Completed => "Archived",
-            GoalStatus::Archived => "Active",
+            GoalStatus::Active => "Active",
+            GoalStatus::Completed => "Completed",
+            GoalStatus::Archived => "Archived",
         }
     }
 }
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Task {
     pub id: String,
     pub title: String,
     pub goal_id: String,
     pub category: String,
     pub status: TaskStatus,
-    pub started_at: Option <DateTime<Utc>>,
-    pub archived_at: Option <DateTime<Utc>>,
-    pub duration_seconds: Option <i32>,
-    pub feedback: Option<String>
+    pub started_at: Option<String>,
+    pub archived_at: Option<String>,
+    pub duration_seconds: Option<i32>,
+    pub feedback: Option<String>,
 }
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Goal {
     pub id: String,
     pub title: String,
-    pub created_at: DateTime<Utc>,
+    pub created_at: String,
     pub status: GoalStatus,
-    pub deadline: Option <DateTime<Utc>>,
-    pub archived_at: Option <DateTime<Utc>>
+    pub deadline: Option<String>,
+    pub archived_at: Option<String>,
 }
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GoalAttempt {
     pub id: String,
     pub goal_id: String,
-    pub date: DateTime<Utc>,
+    pub date: String,
     pub result: String,
     pub is_target_met: bool,
-    pub note: Option <String>
+    pub note: Option<String>,
 }

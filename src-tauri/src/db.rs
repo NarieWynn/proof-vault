@@ -1,6 +1,6 @@
 use rusqlite::{Connection, Result, params};
 use crate::models::{Goal, Task, TaskStatus, GoalStatus, GoalAttempt};
-pub fn init_db (conn: Connection) -> Result<(), rusqlite::Error> {
+pub fn init_db (conn: &Connection) -> Result<(), rusqlite::Error> {
     // 1. Create goals table
     conn.execute(
         "CREATE TABLE IF NOT EXISTS goals (

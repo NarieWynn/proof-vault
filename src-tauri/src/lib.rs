@@ -18,8 +18,9 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .manage(AppState { db: Mutex::new(conn) })
         .invoke_handler(tauri::generate_handler![
-           commands::get_all_goals // Gọi qua module commands::
-            
+           commands::get_all_goals, // Gọi qua module commands::
+            commands::get_all_tasks,
+            commands::get_all_goal_attempts,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

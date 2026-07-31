@@ -157,6 +157,7 @@ pub fn get_all_goals (conn: &Connection) -> Result<Vec<Goal>, rusqlite::Error> {
             status: GoalStatus::from_str(&status_str),
             deadline: row.get(4)?,
             archived_at: row.get(5)?,
+            attempts: vec![],
         })
     })?;
 

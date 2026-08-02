@@ -1,9 +1,20 @@
 pub mod db;
 pub mod models;
-pub mod commands; // Khai báo module commands
+pub mod commands;// Khai báo module commands
 use std::sync::Mutex;
 use rusqlite::Connection;
-
+use crate::commands::get_all_goals;
+use crate::commands::insert_goal;
+use crate::commands::update_goal;
+use crate::commands::delete_goal;
+use crate::commands::get_all_goal_attempts;
+use crate::commands::insert_goal_attempt;
+use crate::commands::update_goal_attempt;
+use crate::commands::delete_goal_attempt;
+use crate::commands::get_all_tasks;
+use crate::commands::insert_task;
+use crate::commands::update_task;
+use crate::commands::delete_task;
 pub struct AppState {
     pub db: Mutex<Connection>,
 }
@@ -18,9 +29,18 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .manage(AppState { db: Mutex::new(conn) })
         .invoke_handler(tauri::generate_handler![
-           commands::get_all_goals, // Gọi qua module commands::
-            commands::get_all_tasks,
-            commands::get_all_goal_attempts,
+           get_all_goals,
+            insert_goal,
+            update_goal,
+            delete_goal,
+            get_all_tasks,
+            insert_task,
+            update_task,
+            delete_task,
+            get_all_goal_attempts,
+            insert_goal_attempt,
+            update_goal_attempt,
+            delete_goal_attempt,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

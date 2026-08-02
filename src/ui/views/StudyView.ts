@@ -1,5 +1,4 @@
-import { TaskManager } from '../../models/TaskManager';
-import { GoalManager } from '../../models/GoalManager';
+
 import { renderTaskItem } from '../components/TaskItem';
 
 export function renderStudyView(

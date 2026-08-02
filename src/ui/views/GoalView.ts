@@ -1,4 +1,4 @@
-import { GoalManager } from '../../models/GoalManager';
+
 import { renderGoalCard } from '../components/GoalCard';
 
 export function renderGoalView(

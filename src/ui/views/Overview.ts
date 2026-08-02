@@ -1,5 +1,3 @@
-import { GoalManager } from '../../models/GoalManager';
-import { TaskManager } from '../../models/TaskManager';
 
 function levelForCount(count: number, max: number): string {
     if (count === 0) return '';

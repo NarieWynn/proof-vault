@@ -1,5 +1,4 @@
-import { GoalManager } from '../../models/GoalManager';
-import { TaskManager } from '../../models/TaskManager';
+
 
 export function renderArchiveView(
     container: HTMLElement,

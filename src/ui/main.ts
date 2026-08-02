@@ -1,6 +1,4 @@
-import { GoalManager } from '../models/GoalManager';
-import { TaskManager } from '../models/TaskManager';
-import { loadAll, saveGoals, saveTasks } from '../storage/jsonStorage';
+import { fetchAllGoals, fetchAllTasks } from '../storage/dbService';
 import { renderTabBar, TabName } from './components/TabBar';
 import { renderGoalView } from './views/GoalView';
 import { renderStudyView } from './views/StudyView';
@@ -13,13 +11,6 @@ const app = document.getElementById('app');
 let currentTab: TabName = 'overview';
 let goalManager: GoalManager;
 let taskManager: TaskManager;
-
-async function persist() {
-    await Promise.all([
-        saveGoals(goalManager.getAllGoals()),
-        saveTasks(taskManager.getAllTasks()),
-    ]);
-}
 
 function renderApp() {
     if (!app) return;
@@ -37,7 +28,6 @@ function renderApp() {
     });
 
     const onChange = () => {
-        persist();
         renderApp();
     };
 
@@ -58,10 +48,19 @@ function renderApp() {
 }
 
 async function init() {
-    const { goals, tasks } = await loadAll();
-    goalManager = new GoalManager(goals);
-    taskManager = new TaskManager(tasks);
-    renderApp();
+    try {
+        const [goals, tasks] = await Promise.all([
+            fetchAllGoals(),
+            fetchAllTasks()
+        ]);
+
+        goalManager = new GoalManager(goals);
+        taskManager = new TaskManager(tasks);
+
+        renderApp();
+    } catch (error) {
+        console.error("Error cannot access data in SQLite:", error);
+    }
 }
 
-init();
+init().catch((err) => console.error("Uncaught init error:", err));

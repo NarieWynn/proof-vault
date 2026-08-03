@@ -1,5 +1,6 @@
 export interface GoalAttempt {
     id: string;
+    goalId: string;
     date: Date;
     result: string;
     isTargetMet: boolean;
@@ -11,7 +12,7 @@ export interface Goal {
     title: string;
     createdAt: Date;
     deadline?: Date;
-    status: 'active' | 'archived';
+    status: 'active' | 'completed' | 'archived';
     attempts: GoalAttempt[];
     archivedAt?: Date;
 }

@@ -1,6 +1,6 @@
 pub mod db;
 pub mod models;
-pub mod commands;// Khai báo module commands
+pub mod commands;
 use std::sync::Mutex;
 use rusqlite::Connection;
 use crate::commands::get_all_goals;

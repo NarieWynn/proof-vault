@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-
+use chrono::{DateTime, Utc};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum TaskStatus {
@@ -61,8 +61,8 @@ pub struct Task {
     pub goal_id: String,
     pub category: String,
     pub status: TaskStatus,
-    pub started_at: Option<String>,
-    pub archived_at: Option<String>,
+    pub started_at: Option<DateTime<Utc>>,
+    pub archived_at: Option<DateTime<Utc>>,
     pub duration_seconds: Option<i32>,
     pub feedback: Option<String>,
 }
@@ -72,10 +72,10 @@ pub struct Task {
 pub struct Goal {
     pub id: String,
     pub title: String,
-    pub created_at: String,
+    pub created_at: DateTime<Utc>,
     pub status: GoalStatus,
-    pub deadline: Option<String>,
-    pub archived_at: Option<String>,
+    pub deadline: Option<DateTime<Utc>>,
+    pub archived_at: Option<DateTime<Utc>>,
     #[serde(default)]
     pub attempts: Vec<GoalAttempt>,
 }
@@ -85,7 +85,7 @@ pub struct Goal {
 pub struct GoalAttempt {
     pub id: String,
     pub goal_id: String,
-    pub date: String,
+    pub date: DateTime<Utc>,
     pub result: String,
     pub is_target_met: bool,
     pub note: Option<String>,

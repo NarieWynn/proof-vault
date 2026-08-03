@@ -18,7 +18,7 @@ function reviveGoalDates(raw: any): Goal {
 function reviveTaskDates(raw: any): Task {
     return {
         ...raw,
-        startedAt: raw.startedAt ? new Date(raw.startedAt) : undefined,
+        createdAt: raw.createdAt ? new Date(raw.createdAt) : undefined,
         archivedAt: raw.archivedAt ? new Date(raw.archivedAt) : undefined,
     };
 }
@@ -30,8 +30,8 @@ export async function fetchAllGoals(): Promise<Goal[]> {
     return rawGoals.map(reviveGoalDates);
 }
 
-export async function createGoal(goal: Goal): Promise<void> {
-    await invoke('insert_goal', { goal });
+export async function createGoal(input: {title: string; deadline?: string}): Promise<void> {
+    await invoke('insert_goal', { input });
 }
 
 export async function updateGoal(goal: Goal): Promise<void> {
@@ -49,8 +49,8 @@ export async function fetchAllTasks(): Promise<Task[]> {
     return rawTasks.map(reviveTaskDates);
 }
 
-export async function createTask(task: Task): Promise<void> {
-    await invoke('insert_task', { task });
+export async function createTask(input: {title: string;  goalId: string; category: string}): Promise<void> {
+    await invoke('insert_task', { input });
 }
 
 export async function updateTask(task: Task): Promise<void>{
@@ -70,8 +70,8 @@ export async function fetchGoalAttempts(goalId: string): Promise<GoalAttempt[]> 
     }));
 }
 
-export async function createGoalAttempt(attempt: GoalAttempt): Promise<void> {
-    await invoke('insert_goal_attempt', { attempt });
+export async function createGoalAttempt(input: {goalId: string; result: string; isTargetMet: boolean; note?: string}): Promise<void> {
+    await invoke('insert_goal_attempt', { input });
 }
 
 export async function updateGoalAttempt(attempt: GoalAttempt): Promise<void> {

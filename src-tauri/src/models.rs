@@ -61,7 +61,7 @@ pub struct Task {
     pub goal_id: String,
     pub category: String,
     pub status: TaskStatus,
-    pub started_at: Option<DateTime<Utc>>,
+    pub created_at: DateTime<Utc>,
     pub archived_at: Option<DateTime<Utc>>,
     pub duration_seconds: Option<i32>,
     pub feedback: Option<String>,
@@ -86,6 +86,30 @@ pub struct GoalAttempt {
     pub id: String,
     pub goal_id: String,
     pub date: DateTime<Utc>,
+    pub result: String,
+    pub is_target_met: bool,
+    pub note: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CreateGoalInput {
+    pub title: String,
+    pub deadline: Option<DateTime<Utc>>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CreateTaskInput {
+    pub title: String,
+    pub goal_id: String,
+    pub category: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CreateGoalAttemptInput {
+    pub goal_id: String,
     pub result: String,
     pub is_target_met: bool,
     pub note: Option<String>,

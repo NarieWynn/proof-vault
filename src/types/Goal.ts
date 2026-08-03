@@ -1,18 +1,26 @@
 export interface GoalAttempt {
     id: string;
     goalId: string;
-    date: Date;
+    date: string; // Trả về dạng string ISO từ DateTime<Utc> của Rust
     result: string;
     isTargetMet: boolean;
     note?: string;
 }
 
+export type GoalStatus = 'active' | 'completed' | 'archived';
+
 export interface Goal {
     id: string;
     title: string;
-    createdAt: Date;
-    deadline?: Date;
-    status: 'active' | 'completed' | 'archived';
+    createdAt: string;
+    status: GoalStatus;
+    deadline?: string;
+    archivedAt?: string;
     attempts: GoalAttempt[];
-    archivedAt?: Date;
+}
+
+// Kiểu input khi gọi createGoal (Khớp với CreateGoalInput bên Rust)
+export interface CreateGoalInput {
+    title: string;
+    deadline?: string; // Dạng "YYYY-MM-DD" hoặc string ISO
 }

@@ -1,8 +1,10 @@
 export * from './types/Goal';
 export * from './types/Task';
 export * from './storage/dbService';
-export * from './utils/helpers';
-
+//export * from './utils/helpers';
+export * from './ui/components/TaskItem';
+export * from './ui/components/GoalCard';
+export * from './ui/components/TabBar';
 export * from './ui/views/Overview';
 export * from './ui/views/StudyView';
 export * from './ui/views/GoalView';

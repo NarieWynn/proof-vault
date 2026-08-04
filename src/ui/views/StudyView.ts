@@ -1,5 +1,10 @@
-import { fetchAllTasks, createTask, fetchAllGoals } from '../../index';
-import { renderTaskItem } from '../components/TaskItem';
+import {
+    fetchAllTasks,
+    createTask,
+    fetchAllGoals,
+    renderTaskItem,
+    deleteTask,
+} from '../../index';
 
 export async function renderStudyView(): Promise<HTMLElement> {
     const container = document.createElement('div');
@@ -39,6 +44,26 @@ export async function renderStudyView(): Promise<HTMLElement> {
             return;
         }
         taskList.innerHTML = tasks.map(t => renderTaskItem(t)).join('');
+        const deleteButtons = taskList.querySelectorAll('.btn-delete');
+
+        deleteButtons.forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const target = e.currentTarget as HTMLButtonElement;
+                const taskId = target.getAttribute('data-id'); // Lấy id được gắn ở data-id="${task.id}"
+
+                if (!taskId) return;
+
+                // (Tùy chọn) Hỏi lại cho chắc ăn trước khi xóa
+                const confirmDelete = confirm('Confirm to delete Task?');
+                if (!confirmDelete) return;
+
+                // 3. BẮN ID XUỐNG RUST ĐỂ XÓA TRONG SQLITE
+                await deleteTask(taskId);
+
+                // 4. LOAD LẠI MÀN HÌNH ĐỂ MẤT THẺ TASK VỪA XÓA
+                await loadTasks();
+            });
+        });
     }
 
     // 3. Hàm load danh sách Goal active vào ô <select>
@@ -60,7 +85,7 @@ export async function renderStudyView(): Promise<HTMLElement> {
         const goalId = selectGoal.value;
 
         if (!title || !goalId) {
-            alert('Nhập tên task và chọn Goal giùm tao cái!');
+            alert('Input task and select goal!');
             return;
         }
 

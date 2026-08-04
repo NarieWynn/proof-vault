@@ -1,4 +1,4 @@
-import { Goal } from '../../types/Goal';
+import { Goal } from '../../index';
 
 export function renderGoalCard(goal: Goal): string {
     const isArchived = goal.status === 'archived';

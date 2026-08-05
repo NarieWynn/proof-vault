@@ -58,7 +58,7 @@ impl GoalStatus {
 pub struct Task {
     pub id: String,
     pub title: String,
-    pub goal_id: String,
+    pub goal_id: Option <String>,
     pub category: String,
     pub status: TaskStatus,
     pub created_at: DateTime<Utc>,

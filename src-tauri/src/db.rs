@@ -51,21 +51,32 @@ pub fn init_db (conn: &Connection) -> Result<(), rusqlite::Error> {
 //============================================================================================
 // GET ALL TASKS TO RENDER OVERVIEW
 //============================================================================================
-pub fn get_all_tasks (conn: &Connection) -> Result<Vec<Task>, rusqlite::Error> {
+pub fn get_all_tasks(conn: &Connection) -> Result<Vec<Task>, rusqlite::Error> {
     let mut stmt = conn.prepare(
         "SELECT id, title, goal_id, category, status, started_at, archived_at, duration_seconds, feedback FROM tasks"
     )?;
 
     let tasks = stmt.query_map([], |row| {
         let status_str: String = row.get(4)?;
+
+        // 🛠️ Đọc started_at dạng String từ DB ra rồi parse sang DateTime<Utc>
+        let created_at_str: String = row.get(5)?;
+        let created_at = created_at_str
+            .parse::<chrono::DateTime<chrono::Utc>>()
+            .unwrap_or_else(|_| chrono::Utc::now());
+
+        // 🛠️ Parse archived_at nếu có
+        let archived_at_str: Option<String> = row.get(6)?;
+        let archived_at = archived_at_str.and_then(|s| s.parse::<chrono::DateTime<chrono::Utc>>().ok());
+
         Ok(Task {
             id: row.get(0)?,
             title: row.get(1)?,
-            goal_id: row.get(2)?,
+            goal_id: row.get(2)?, // rusqlite tự map NULL trong SQLite -> Option<String> trong Rust!
             category: row.get(3)?,
             status: TaskStatus::from_str(&status_str),
-            created_at: row.get(5)?,
-            archived_at: row.get(6)?,
+            created_at,
+            archived_at,
             duration_seconds: row.get(7)?,
             feedback: row.get(8)?,
         })

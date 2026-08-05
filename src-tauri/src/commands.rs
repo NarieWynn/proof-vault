@@ -94,7 +94,7 @@ pub fn insert_task(state: State<AppState>, input: CreateTaskInput) -> Result<(),
     let new_task = Task {
         id: uuid::Uuid::new_v4().to_string(),
         title: input.title,
-        goal_id: input.goal_id,
+        goal_id: if input.goal_id.is_empty() { None } else { Some(input.goal_id) },
         category: input.category,
         status: TaskStatus::Todo,
         created_at: Utc::now(),
